@@ -5,9 +5,13 @@ import iFrameConstants from "../../constants/iframeConstants";
 import IframeSrcFormularScreen from "./IframeSrcFormularScreen/IframeSrcFormularScreen";
 import IframeSrcQRScreen from "./IframeSrcQRScreen/IframeSrcQRScreen";
 
-// structure of url params:
+//  strucutre code qr
 //  ?iFramePageType=[qrCode|formCompletion]&thirdPartyToken=['token']
 //  iframe?iFramePageType=qrCode&thirdPartyToken=12314123
+
+/* structure form
+localhost:3000/iframe?iFramePageType=formCompletion&thirdPartyToken=12314123&formInputs={"title":"Welcome","subtitle":"Hello","fields":[{"label":"your name","isRequired":true},{"label":"adress","isRequired":true},{"label":"phone number","isRequired":true},{"label":"message","isRequired":true}]}
+*/
 
 const IframeRouter = () => {
   const { location } = useHistory();
@@ -20,9 +24,16 @@ const IframeRouter = () => {
   const iFramePageType = params.get("iFramePageType");
   const userToken = params.get("thirdPartyToken");
 
-  console.log(userToken, iFramePageType);
+  const formInputs = JSON.parse(params.get("formInputs"));
 
-  if (!userToken || !iFramePageType) {
+  if (
+    iFramePageType === iFrameConstants.iFramePageType.formCompletion &&
+    !displayFormCompletionScreen
+  ) {
+    setDisplayFormCompletionScreen(true);
+  }
+
+  if (!userToken || !iFramePageType || (!!iFramePageType && !formInputs)) {
     return <div>Invalid url source.</div>;
   }
 
@@ -42,7 +53,7 @@ const IframeRouter = () => {
           userToken={userToken}
           onSuccessScan={() => handleQRScan()}
         />
-      )) || <IframeSrcFormularScreen />}
+      )) || <IframeSrcFormularScreen formInputs={formInputs} />}
     </>
   );
 };

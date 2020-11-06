@@ -6,7 +6,6 @@ import {
   Redirect,
 } from "react-router-dom";
 
-import Frame from "react-frame-component";
 import IframeRouter from "./pages/IFrame/IframeRouter";
 
 function AppRoutes() {
@@ -14,10 +13,7 @@ function AppRoutes() {
     <Router>
       <Switch>
         <Route path={"/iframe"}>
-          {/* Testing purposes only  */}
-          <Frame width="500px" height="500px">
-            <IframeRouter />
-          </Frame>
+          <IframeRouter />
         </Route>
 
         <Redirect to={"/"}></Redirect>

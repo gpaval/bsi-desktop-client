@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const StyledIframeSrcFormularScreen = styled.div`
+const StyledIframeSrcFormScreen = styled.div`
   display: flex;
   justify-content: center;
   .form {
@@ -32,10 +32,16 @@ const StyledIframeSrcFormularScreen = styled.div`
       }
 
       &__input {
-        min-width: 400px;
+        min-width: 380px;
         height: 45px;
         border-radius: 15px;
         border: 1px solid black;
+        padding-left: 20px;
+        outline: none;
+
+        &--textarea {
+          padding: 20px;
+        }
       }
     }
     &__button {
@@ -50,4 +56,4 @@ const StyledIframeSrcFormularScreen = styled.div`
   }
 `;
 
-export default StyledIframeSrcFormularScreen;
+export default StyledIframeSrcFormScreen;

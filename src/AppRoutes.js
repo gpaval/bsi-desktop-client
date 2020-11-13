@@ -5,6 +5,7 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
+import { TableComponent } from "./components/TableComponent";
 
 import IframeRouter from "./pages/IFrame/IframeRouter";
 
@@ -15,7 +16,9 @@ function AppRoutes() {
         <Route path={"/iframe"}>
           <IframeRouter />
         </Route>
-
+        <Route path={"/cms"}>
+          <TableComponent />
+        </Route>
         <Redirect to={"/"}></Redirect>
       </Switch>
     </Router>

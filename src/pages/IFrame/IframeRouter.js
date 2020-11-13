@@ -2,15 +2,17 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import iFrameConstants from "../../constants/iframeConstants";
-import IframeSrcFormularScreen from "./IframeSrcFormularScreen/IframeSrcFormularScreen";
+import IframeSrcFormScreen from "./IframeSrcFormularScreen/IframeSrcFormScreen";
 import IframeSrcQRScreen from "./IframeSrcQRScreen/IframeSrcQRScreen";
 
 //  strucutre code qr
 //  ?iFramePageType=[qrCode|formCompletion]&thirdPartyToken=['token']
-//  iframe?iFramePageType=qrCode&thirdPartyToken=12314123
+/*  
+localhost:3000/iframe?iFramePageType=qrCode&thirdPartyToken=12314123 
 
+*/
 /* structure form
-localhost:3000/iframe?iFramePageType=formCompletion&thirdPartyToken=12314123&formInputs={"title":"Welcome","subtitle":"Hello","fields":[{"label":"your name","isRequired":true},{"label":"adress","isRequired":true},{"label":"phone number","isRequired":true},{"label":"message","isRequired":true}]}
+localhost:3000/iframe?iFramePageType=formCompletion&thirdPartyToken=12314123&formInputs={"title":"Welcome","subtitle":"Hello","fields":[{"label":"your name","isRequired":true,"type":"input"},{"label":"adress","isRequired":true,"type":"input"},{"label":"phone number","isRequired":true,"type":"input"},{"label":"message","isRequired":true,"type":"textarea"}]}
 */
 
 const IframeRouter = () => {
@@ -23,42 +25,40 @@ const IframeRouter = () => {
 
   const iFramePageType = params.get("iFramePageType");
   const userToken = params.get("thirdPartyToken");
+  const formInputsData = params.get("formInputs");
 
-  const formInputs = JSON.parse(params.get("formInputs"));
+  const formInputs = formInputsData && JSON.parse(params.get("formInputs"));
+  const isFormPage =
+    iFramePageType === iFrameConstants.iFramePageType.formCompletion;
+  const isValidFormPage = !!formInputs;
 
-  if (
-    iFramePageType === iFrameConstants.iFramePageType.formCompletion &&
-    !displayFormCompletionScreen
-  ) {
+  if (isFormPage && !displayFormCompletionScreen) {
     setDisplayFormCompletionScreen(true);
   }
 
-  if (
-    !userToken ||
-    !iFramePageType ||
-    (iFramePageType === iFrameConstants.iFramePageType.formCompletion &&
-      !formInputs)
-  ) {
+  if (!userToken || !iFramePageType || (isFormPage && !isValidFormPage)) {
     return <div>Invalid url source.</div>;
   }
 
   // todo: implement with databse
   const handleQRScan = () => {
     // server call
-    if (iFramePageType === iFrameConstants.iFramePageType.formCompletion) {
+    if (isFormPage) {
       setDisplayFormCompletionScreen(true);
     }
   };
 
   return (
     <>
-      {" "}
       {(!displayFormCompletionScreen && (
         <IframeSrcQRScreen
           userToken={userToken}
           onSuccessScan={() => handleQRScan()}
         />
-      )) || <IframeSrcFormularScreen formInputs={formInputs} />}
+      )) ||
+        (isFormPage && isValidFormPage && (
+          <IframeSrcFormScreen formInputs={formInputs} />
+        ))}
     </>
   );
 };

@@ -1,0 +1,19 @@
+[
+  {
+    "name": "Farrel",
+    "id": 1,
+    "permission": "R"
+  },
+  { "name": "Vi", "id": 2, "permission": "R" },
+  { "name": "Reuben", "id": 3, "permission": "R" },
+  { "name": "Joela", "id": 4, "permission": "R/W" },
+  { "name": "Neila", "id": 5, "permission": "R/W" },
+  { "name": "Matty", "id": 6, "permission": "R" },
+  { "name": "Niki", "id": 7, "permission": "R/W" },
+  { "name": "Poul", "id": 8, "permission": "R" },
+  { "name": "Junette", "id": 9, "permission": "R" },
+  { "name": "Kori", "id": 10, "permission": "R/W" },
+  { "name": "Emily", "id": 11, "permission": "R/W" },
+  { "name": "Kort", "id": 12, "permission": "R" },
+  { "name": "Raffaello", "id": 13, "permission": "R" }
+]

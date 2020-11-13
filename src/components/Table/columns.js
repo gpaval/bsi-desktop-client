@@ -1,3 +1,5 @@
+import ButtonComponent from "../Button/Button";
+
 export const COLUMNS = [
   {
     Header: "Name",
@@ -11,8 +13,13 @@ export const COLUMNS = [
     Header: "R/W Permission",
     accessor: "permission",
   },
+
   {
-    Header: " ",
+    height: 80,
+    Header: "",
     accessor: "info",
+    Cell: () => (
+      <ButtonComponent width={"97px"} height={"28x"} text={"more info"} />
+    ),
   },
 ];

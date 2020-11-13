@@ -6,8 +6,11 @@ const StyledIframeSrcQRScreen = styled.div`
   .qr-page {
     margin-top: 10px;
     &__code {
-      max-width: 200px;
-      max-height: 200px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 20px;
+      margin-bottom: 20px;
     }
     &__title {
       margin-top: 10px;

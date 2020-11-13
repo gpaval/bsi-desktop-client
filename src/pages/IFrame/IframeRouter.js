@@ -33,7 +33,12 @@ const IframeRouter = () => {
     setDisplayFormCompletionScreen(true);
   }
 
-  if (!userToken || !iFramePageType || (!!iFramePageType && !formInputs)) {
+  if (
+    !userToken ||
+    !iFramePageType ||
+    (iFramePageType === iFrameConstants.iFramePageType.formCompletion &&
+      !formInputs)
+  ) {
     return <div>Invalid url source.</div>;
   }
 

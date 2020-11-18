@@ -19,6 +19,9 @@ function AppRoutes() {
         <Route path={"/cms"}>
           <Cms />
         </Route>
+        {/* <Route path="/cms/create">
+          <CmsCreate />
+        </Route> */}
         <Redirect to={"/"}></Redirect>
       </Switch>
     </Router>

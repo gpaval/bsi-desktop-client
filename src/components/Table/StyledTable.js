@@ -2,11 +2,7 @@ import styled from "styled-components";
 
 const StyledTable = styled.div`
   table {
-    position: absolute;
-    width: 1400px;
     height: 583px;
-    left: 50px;
-    top: 197px;
 
     background: #ffffff;
     box-sizing: border-box;

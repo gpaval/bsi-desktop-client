@@ -1,9 +1,12 @@
 // here we are going to decide which pages should display depending of the iFrame provided params.
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import iFrameConstants from "../../constants/iframeConstants";
 import IframeSrcFormScreen from "./IframeSrcFormularScreen/IframeSrcFormScreen";
 import IframeSrcQRScreen from "./IframeSrcQRScreen/IframeSrcQRScreen";
+import { w3cwebsocket as W3CWebSocket } from "websocket";
+
+const client = new W3CWebSocket(process.env.REACT_APP_WS);
 
 //  strucutre code qr
 //  ?iFramePageType=[qrCode|formCompletion]&thirdPartyToken=['token']
@@ -22,6 +25,22 @@ const IframeRouter = () => {
     displayFormCompletionScreen,
     setDisplayFormCompletionScreen,
   ] = useState(false);
+
+  useEffect(() => {
+    client.onopen = () => {
+      console.log("WebSocket Client Connected");
+      client.send(
+        JSON.stringify({
+          text: "test",
+          type: "userevent",
+        })
+      );
+      console.log("sent!");
+    };
+    client.onmessage = (message) => {
+      console.log(message);
+    };
+  });
 
   const iFramePageType = params.get("iFramePageType");
   const userToken = params.get("thirdPartyToken");

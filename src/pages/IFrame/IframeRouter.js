@@ -18,27 +18,38 @@ localhost:3000/iframe?iFramePageType=qrCode&thirdPartyToken=12314123
 localhost:3000/iframe?iFramePageType=formCompletion&thirdPartyToken=12314123&formInputs={"title":"Welcome","subtitle":"Hello","fields":[{"label":"your name","isRequired":true,"type":"input"},{"label":"adress","isRequired":true,"type":"input"},{"label":"phone number","isRequired":true,"type":"input"},{"label":"message","isRequired":true,"type":"textarea"}]}
 */
 
+const TYPES = {
+  connectionID: "connectionId",
+};
+
 const IframeRouter = () => {
   const { location } = useHistory();
   const params = new URLSearchParams(location.search);
+
+  const [connectionId, setConnectionId] = useState(null);
+
   const [
     displayFormCompletionScreen,
     setDisplayFormCompletionScreen,
   ] = useState(false);
 
   useEffect(() => {
-    client.onopen = () => {
+    client.onopen = (connection) => {
+      console.log(connection);
       console.log("WebSocket Client Connected");
       client.send(
         JSON.stringify({
           text: "test",
-          type: "userevent",
+          type: TYPES.connectionID,
         })
       );
       console.log("sent!");
     };
-    client.onmessage = (message) => {
-      console.log(message);
+    client.onmessage = ({ data }) => {
+      const receivedData = JSON.parse(data);
+      if (receivedData && receivedData.type === TYPES.connectionID) {
+        setConnectionId(receivedData.connectionId);
+      }
     };
   });
 
@@ -72,6 +83,7 @@ const IframeRouter = () => {
       {(!displayFormCompletionScreen && (
         <IframeSrcQRScreen
           userToken={userToken}
+          connectionId={connectionId}
           onSuccessScan={() => handleQRScan()}
         />
       )) ||

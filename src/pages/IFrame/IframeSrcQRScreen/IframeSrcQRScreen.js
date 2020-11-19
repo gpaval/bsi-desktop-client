@@ -3,7 +3,7 @@ import StyledIframeSrcQRScreen from "./StyledIframeSrcQRScreen";
 
 const QRCode = require("qrcode.react");
 
-const IframeSrcQRScreen = ({ userToken }) => {
+const IframeSrcQRScreen = ({ userToken, connectionId }) => {
   const [organizationInfo, setOrganizationInfo] = useState({
     qrCode: "",
     name: "",
@@ -15,7 +15,7 @@ const IframeSrcQRScreen = ({ userToken }) => {
     setOrganizationInfo({
       qrCode: JSON.stringify({
         name: "Test",
-        userToken: "1234",
+        connectionId,
       }),
       name: "Test",
     });

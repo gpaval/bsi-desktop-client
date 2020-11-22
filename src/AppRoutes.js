@@ -6,6 +6,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import Cms from "./pages/Cms/Cms";
+import CmsCreate from "./pages/CmsCreate/CmsCreate";
 
 import IframeRouter from "./pages/IFrame/IframeRouter";
 
@@ -19,9 +20,9 @@ function AppRoutes() {
         <Route path={"/cms"}>
           <Cms />
         </Route>
-        {/* <Route path="/cms/create">
+        <Route path="/cms-create">
           <CmsCreate />
-        </Route> */}
+        </Route>
         <Redirect to={"/"}></Redirect>
       </Switch>
     </Router>

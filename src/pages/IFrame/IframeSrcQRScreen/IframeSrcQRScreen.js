@@ -5,18 +5,14 @@ const QRCode = require("qrcode.react");
 
 const IframeSrcQRScreen = ({ userToken, connectionId }) => {
   const [organizationInfo, setOrganizationInfo] = useState({
-    qrCode: "",
     name: "",
   });
   const startServerPool = () => {};
   const stopServerPool = () => {};
 
   const getOrganizationData = () => {
+    // todo: de luat datele organizatiei din id, pentru a le trimite in codul qr (ex: datele pe care utilizatorul accepta sa le ofere.)
     setOrganizationInfo({
-      qrCode: JSON.stringify({
-        name: "Test",
-        connectionId,
-      }),
       name: "Test",
     });
   };
@@ -33,7 +29,19 @@ const IframeSrcQRScreen = ({ userToken, connectionId }) => {
     <StyledIframeSrcQRScreen>
       {(!!Object.keys(organizationInfo).length !== 0 && (
         <div className="qr-page">
-          <QRCode className="qr-page__code" value={organizationInfo.qrCode} />
+          <QRCode
+            className="qr-page__code"
+            value={JSON.stringify({
+              name: "Test",
+              connectionId,
+            })}
+          />
+          <div>
+            {JSON.stringify({
+              name: "Test",
+              connectionId,
+            })}
+          </div>
 
           <div className="qr-page__title">
             Scan the following qr code, in order to register to the{" "}

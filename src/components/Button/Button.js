@@ -5,6 +5,9 @@ function getBackgroundByType(type) {
   if (type === "primary") {
     return "#FF4834";
   }
+  if (type === "white") {
+    return "white";
+  }
 }
 
 const ButtonComponent = ({
@@ -19,6 +22,7 @@ const ButtonComponent = ({
       width={width}
       height={height}
       background={getBackgroundByType(type)}
+      type={type}
       onClick={onClick}
     >
       <>{text}</>

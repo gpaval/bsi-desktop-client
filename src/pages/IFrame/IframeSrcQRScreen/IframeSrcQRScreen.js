@@ -11,19 +11,27 @@ const IframeSrcQRScreen = ({ userToken, connectionId }) => {
   const stopServerPool = () => {};
 
   const getOrganizationData = () => {
-    // todo: de luat datele organizatiei din id, pentru a le trimite in codul qr (ex: datele pe care utilizatorul accepta sa le ofere.)
-    setOrganizationInfo({
-      name: "Test",
-    });
+    fetch(
+      `https://16wdwjr6pj.execute-api.eu-central-1.amazonaws.com/dev/getThirdParty?id=${userToken}`
+    )
+      .then((rawData) => rawData.json())
+      .then((data) => {
+        delete data.token;
+        delete data.permission;
+        delete data.id;
+        setOrganizationInfo({
+          connectionId,
+          ...data,
+        });
+      });
   };
 
   useEffect(() => {
-    getOrganizationData();
-    startServerPool();
-    return () => {
-      stopServerPool();
-    };
-  }, []);
+    console.log("here!");
+    if (connectionId) {
+      getOrganizationData();
+    }
+  }, [connectionId]);
 
   return (
     <StyledIframeSrcQRScreen>
@@ -32,14 +40,12 @@ const IframeSrcQRScreen = ({ userToken, connectionId }) => {
           <QRCode
             className="qr-page__code"
             value={JSON.stringify({
-              name: "Test",
-              connectionId,
+              d: organizationInfo,
             })}
           />
           <div>
             {JSON.stringify({
-              name: "Test",
-              connectionId,
+              d: organizationInfo,
             })}
           </div>
 

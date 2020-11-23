@@ -20,6 +20,7 @@ localhost:3000/iframe?iFramePageType=formCompletion&thirdPartyToken=12314123&for
 
 const TYPES = {
   connectionID: "connectionId",
+  payload: "payload",
 };
 
 const IframeRouter = () => {
@@ -32,6 +33,15 @@ const IframeRouter = () => {
     displayFormCompletionScreen,
     setDisplayFormCompletionScreen,
   ] = useState(false);
+
+  const iFramePageType = params.get("iFramePageType");
+  const userToken = params.get("thirdPartyToken");
+  const formInputsData = params.get("formInputs");
+
+  const formInputs = formInputsData && JSON.parse(params.get("formInputs"));
+  const isFormPage =
+    iFramePageType === iFrameConstants.iFramePageType.formCompletion;
+  const isValidFormPage = !!formInputs;
 
   useEffect(() => {
     client.onopen = (connection) => {
@@ -47,20 +57,16 @@ const IframeRouter = () => {
     };
     client.onmessage = ({ data }) => {
       const receivedData = JSON.parse(data);
+
       if (receivedData && receivedData.type === TYPES.connectionID) {
         setConnectionId(receivedData.connectionId);
       }
+
+      if (receivedData && receivedData.type === TYPES.payload) {
+        console.log("RECEIVED SUCCESS PAYLOAD!", data);
+      }
     };
   });
-
-  const iFramePageType = params.get("iFramePageType");
-  const userToken = params.get("thirdPartyToken");
-  const formInputsData = params.get("formInputs");
-
-  const formInputs = formInputsData && JSON.parse(params.get("formInputs"));
-  const isFormPage =
-    iFramePageType === iFrameConstants.iFramePageType.formCompletion;
-  const isValidFormPage = !!formInputs;
 
   if (isFormPage && !displayFormCompletionScreen) {
     setDisplayFormCompletionScreen(true);

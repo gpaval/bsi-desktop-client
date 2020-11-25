@@ -7,8 +7,6 @@ const IframeSrcQRScreen = ({ userToken, connectionId }) => {
   const [organizationInfo, setOrganizationInfo] = useState({
     name: "",
   });
-  const startServerPool = () => {};
-  const stopServerPool = () => {};
 
   const getOrganizationData = () => {
     fetch(
@@ -39,15 +37,9 @@ const IframeSrcQRScreen = ({ userToken, connectionId }) => {
         <div className="qr-page">
           <QRCode
             className="qr-page__code"
-            value={JSON.stringify({
-              d: organizationInfo,
-            })}
+            value={JSON.stringify(organizationInfo)}
           />
-          <div>
-            {JSON.stringify({
-              d: organizationInfo,
-            })}
-          </div>
+          <div>{JSON.stringify(organizationInfo)}</div>
 
           <div className="qr-page__title">
             Scan the following qr code, in order to register to the{" "}

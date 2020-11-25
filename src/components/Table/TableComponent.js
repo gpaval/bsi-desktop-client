@@ -3,10 +3,12 @@ import { useTable } from "react-table";
 import MOCK_DATA from "./MOCK_DATA.json";
 import { COLUMNS } from "./columns";
 import StyledTable from "./StyledTable";
+import { useHistory } from "react-router-dom";
 
-const TableComponent = () => {
-  const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => MOCK_DATA, []);
+const TableComponent = ({ thirdParties }) => {
+  const history = useHistory();
+  const columns = useMemo(() => COLUMNS(history), []);
+  const data = useMemo(() => thirdParties, []);
 
   const tableInstance = useTable({
     columns,

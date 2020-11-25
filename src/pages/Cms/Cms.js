@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import ButtonComponent from "../../components/Button/Button";
 
@@ -6,6 +6,18 @@ import TableComponent from "../../components/Table/TableComponent";
 import StyledCms from "./StyledCms";
 
 const Cms = () => {
+  const [thirdParties, setThirdParties] = useState([]);
+
+  useEffect(() => {
+    fetch(
+      "https://16wdwjr6pj.execute-api.eu-central-1.amazonaws.com/dev/listThirdParties"
+    )
+      .then((rawData) => rawData.json())
+      .then((data) => {
+        setThirdParties(data);
+      });
+  }, []);
+
   const history = useHistory();
   return (
     <StyledCms>
@@ -21,7 +33,9 @@ const Cms = () => {
         </div>
         <hr />
         <div className="cms__table">
-          <TableComponent />
+          {Array.isArray(thirdParties) && thirdParties.length > 0 && (
+            <TableComponent thirdParties={thirdParties} />
+          )}
         </div>
       </div>
     </StyledCms>

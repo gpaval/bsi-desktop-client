@@ -11,7 +11,7 @@ const client = new W3CWebSocket(process.env.REACT_APP_WS);
 //  strucutre code qr
 //  ?iFramePageType=[qrCode|formCompletion]&thirdPartyToken=['token']
 /*  
-localhost:3000/iframe?iFramePageType=qrCode&thirdPartyToken=12314123 
+localhost:3000/iframe?iFramePageType=qrCode&thirdPartyToken=1a32f9b9-07ef-4e48-8967-bfca1af6997d
 
 */
 /* structure form
@@ -20,7 +20,7 @@ localhost:3000/iframe?iFramePageType=formCompletion&thirdPartyToken=12314123&for
 
 const TYPES = {
   connectionID: "connectionId",
-  payload: "payload",
+  registering: "registering",
 };
 
 const IframeRouter = () => {
@@ -57,12 +57,11 @@ const IframeRouter = () => {
     };
     client.onmessage = ({ data }) => {
       const receivedData = JSON.parse(data);
-
       if (receivedData && receivedData.type === TYPES.connectionID) {
         setConnectionId(receivedData.connectionId);
       }
 
-      if (receivedData && receivedData.type === TYPES.payload) {
+      if (receivedData && receivedData.type === TYPES.registering) {
         console.log("RECEIVED SUCCESS PAYLOAD!", data);
       }
     };

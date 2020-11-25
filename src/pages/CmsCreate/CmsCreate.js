@@ -34,6 +34,10 @@ const CmsCreate = () => {
   };
 
   const onSubmit = () => {
+    const selectedItems = items
+      .filter((item) => item.isSelected)
+      .map((filteredItems) => filteredItems.name);
+    console.log({ selectedItems });
     console.log("submitted!");
   };
   const onCancel = () => {

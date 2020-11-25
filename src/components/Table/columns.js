@@ -1,13 +1,13 @@
 import ButtonComponent from "../Button/Button";
 
-export const COLUMNS = [
+export const COLUMNS = (history) => [
   {
     Header: "Name",
     accessor: "name",
   },
   {
     Header: "ID",
-    accessor: "id",
+    accessor: "token",
   },
   {
     Header: "R/W Permission",
@@ -17,9 +17,14 @@ export const COLUMNS = [
   {
     height: 80,
     Header: "",
-    accessor: "info",
-    Cell: () => (
-      <ButtonComponent width={"97px"} height={"28x"} text={"more info"} />
+    accessor: "tid",
+    Cell: ({ cell }) => (
+      <ButtonComponent
+        width={"97px"}
+        height={"28x"}
+        text={"more info"}
+        onClick={() => history.push(`/cms-update/${cell.value}`)}
+      />
     ),
   },
 ];

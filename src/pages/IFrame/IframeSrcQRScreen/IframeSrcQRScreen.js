@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import StyledIframeSrcQRScreen from "./StyledIframeSrcQRScreen";
+import lockIcon from "../../../assets/images/lock.svg";
 
 const QRCode = require("qrcode.react");
 
@@ -7,6 +8,7 @@ const IframeSrcQRScreen = ({ userToken, connectionId }) => {
   const [organizationInfo, setOrganizationInfo] = useState({
     name: "",
   });
+  const [entityToken, setEntityToken] = useState("");
 
   const getOrganizationData = () => {
     fetch(
@@ -14,6 +16,7 @@ const IframeSrcQRScreen = ({ userToken, connectionId }) => {
     )
       .then((rawData) => rawData.json())
       .then((data) => {
+        setEntityToken(data.token);
         delete data.token;
         delete data.permission;
         delete data.id;
@@ -35,15 +38,29 @@ const IframeSrcQRScreen = ({ userToken, connectionId }) => {
     <StyledIframeSrcQRScreen>
       {(!!Object.keys(organizationInfo).length !== 0 && (
         <div className="qr-page">
+          <div className="qr-page__title qr-page--themed">Welcome</div>
+          <div className="qr-page__subtitle">
+            please register with your{" "}
+            <span className="qr-page--themed">Citizen QR Application</span>
+          </div>
+
           <QRCode
+            size={256}
             className="qr-page__code"
             value={JSON.stringify(organizationInfo)}
           />
-          <div>{JSON.stringify(organizationInfo)}</div>
 
-          <div className="qr-page__title">
-            Scan the following qr code, in order to register to the{" "}
-            {organizationInfo.name} organization.
+          <div className="qr-page-footer">
+            <div className="qr-page-footer__element">
+              Entity token: {entityToken}
+            </div>
+            <div className="qr-page-footer__element">
+              Entity name: {organizationInfo.name}
+            </div>
+            <div className="qr-page-footer__element">
+              <img src={lockIcon} className="qr-page-footer__element--image" />
+              Blockchain secured
+            </div>
           </div>
         </div>
       )) || <div>Loading...</div>}

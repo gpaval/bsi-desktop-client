@@ -8,6 +8,7 @@ const SelectCar = () => {
   const history = useHistory();
   const location = useLocation();
 
+  console.log();
   const goTo = (id) => {
     history.push({
       pathname: `/carInfo/${id}`,
@@ -34,7 +35,9 @@ const SelectCar = () => {
     <StyledSelectCar>
       <div className="select-car">
         <div className="select-car-header">
-          <div className="select-car-header__title">wip</div>
+          <div className="select-car-header__title">
+            current client: {location.state.firstName} {location.state.lastName}
+          </div>
         </div>
         <hr />
         <div className="select-car-content">

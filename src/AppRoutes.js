@@ -11,6 +11,7 @@ import CmsCreate from "./pages/CmsCreate/CmsCreate";
 import CmsUpdate from "./pages/CmsUpdate/CmsUpdate";
 
 import IframeRouter from "./pages/IFrame/IframeRouter";
+import NewMaintenance from "./pages/NewMaintenance/NewMaintenance";
 import SelectCar from "./pages/SelectCar/SelectCar";
 import SuccessfullyAuthed from "./pages/SuccessfullyAuthed/SuccessfullyAuthed";
 
@@ -38,6 +39,9 @@ function AppRoutes() {
         </Route>
         <Route path="/selectCar">
           <SelectCar />
+        </Route>
+        <Route path="/new-maintenance">
+          <NewMaintenance />
         </Route>
         <Redirect to={"/"} />
       </Switch>

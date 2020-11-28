@@ -11,6 +11,7 @@ import {
 import "react-vertical-timeline-component/style.min.css";
 import maintenanceIcon from "../../assets/images/maintenance.svg";
 import creationIcon from "../../assets/images/creation.svg";
+import { useHistory, useLocation } from "react-router-dom";
 
 const icons = {
   maintenanceIcon: maintenanceIcon,
@@ -20,6 +21,9 @@ const icons = {
 const CarInfo = () => {
   const onSubmit = () => {};
   const [carName, setCarName] = useState("");
+  const history = useHistory();
+  const location = useLocation();
+  console.log(location.state);
 
   const roadMapElements = [
     {
@@ -51,10 +55,10 @@ const CarInfo = () => {
         <div className="car-info-header">
           <div className="car-info-header__title">{carName}</div>
           <ButtonComponent
-            text={"Create"}
+            text={"New maintenance"}
             width={"97px"}
             height={"28px"}
-            onClick={onSubmit}
+            onClick={() => history.push("/new-maintenance")}
           />
         </div>
         <hr />

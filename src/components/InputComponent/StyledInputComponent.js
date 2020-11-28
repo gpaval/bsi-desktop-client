@@ -14,6 +14,10 @@ const StyledInputComponent = styled.div`
       border-radius: 10px;
       outline: none;
       padding: 0px 10px;
+
+      &--textarea {
+        padding-top: 20px;
+      }
     }
   }
 `;

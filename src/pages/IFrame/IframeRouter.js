@@ -24,6 +24,7 @@ const TYPES = {
 };
 
 const IframeRouter = () => {
+  const history = useHistory();
   const { location } = useHistory();
   const params = new URLSearchParams(location.search);
 
@@ -62,7 +63,20 @@ const IframeRouter = () => {
       }
 
       if (receivedData && receivedData.type === TYPES.registering) {
-        console.log("RECEIVED SUCCESS PAYLOAD!", data);
+        try {
+          const parsedData = JSON.parse(data);
+          const parsedMessage = (JSON.parse(parsedData.message) || []).flat(
+            1
+          )[0];
+          history.push({
+            pathname: "/successfully",
+            state: {
+              ...parsedMessage,
+            },
+          });
+        } catch (err) {
+          console.log(err);
+        }
       }
     };
   });

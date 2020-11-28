@@ -5,11 +5,14 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
+import CarInfo from "./pages/CarInfo/CarInfo";
 import Cms from "./pages/Cms/Cms";
 import CmsCreate from "./pages/CmsCreate/CmsCreate";
 import CmsUpdate from "./pages/CmsUpdate/CmsUpdate";
 
 import IframeRouter from "./pages/IFrame/IframeRouter";
+import SelectCar from "./pages/SelectCar/SelectCar";
+import SuccessfullyAuthed from "./pages/SuccessfullyAuthed/SuccessfullyAuthed";
 
 function AppRoutes() {
   return (
@@ -27,7 +30,16 @@ function AppRoutes() {
         <Route path="/cms-update/:id">
           <CmsUpdate />
         </Route>
-        <Redirect to={"/"}></Redirect>
+        <Route path="/successfully">
+          <SuccessfullyAuthed />
+        </Route>
+        <Route path="/carInfo/:carId">
+          <CarInfo />
+        </Route>
+        <Route path="/selectCar">
+          <SelectCar />
+        </Route>
+        <Redirect to={"/"} />
       </Switch>
     </Router>
   );

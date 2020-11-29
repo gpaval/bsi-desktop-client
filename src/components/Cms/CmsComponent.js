@@ -5,6 +5,7 @@ import InputComponent from "../InputComponent/InputComponent";
 import StyledCmsComponent from "./StyledCmsComponent";
 
 const CmsComponent = ({
+  isAdd = true,
   name,
   onNameChange,
   managerEmail,
@@ -18,9 +19,11 @@ const CmsComponent = ({
     <StyledCmsComponent>
       <div className="cms">
         <div className="cms-header">
-          <div className="cms-header__title">Add</div>
+          <div className="cms-header__title">
+            {`${(isAdd && "Add") || "Edit"}`}
+          </div>
           <ButtonComponent
-            text={"Create"}
+            text={`${(isAdd && "Create") || "Submit"}`}
             width={"97px"}
             height={"28px"}
             onClick={onSubmit}
@@ -38,14 +41,16 @@ const CmsComponent = ({
                   placeholder="Entity name:"
                 />
               </div>
-              <div className="cms-body-grid--left__input">
-                <InputComponent
-                  label="Entity manager email:"
-                  value={managerEmail}
-                  onUpdateInput={(value) => onManagerEmailChange(value)}
-                  placeholder="Entity manager email"
-                />
-              </div>
+              {isAdd && (
+                <div className="cms-body-grid--left__input">
+                  <InputComponent
+                    label="Entity manager email:"
+                    value={managerEmail}
+                    onUpdateInput={(value) => onManagerEmailChange(value)}
+                    placeholder="Entity manager email"
+                  />
+                </div>
+              )}
             </div>
             <div className="cms-body-grid__right">
               <div className="cms-body-selector">

@@ -17,7 +17,7 @@ export const COLUMNS = (history) => [
   {
     height: 80,
     Header: "",
-    accessor: "tid",
+    accessor: "id",
     Cell: ({ cell }) => (
       <ButtonComponent
         width={"97px"}

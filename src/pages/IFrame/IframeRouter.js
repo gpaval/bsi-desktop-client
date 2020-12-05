@@ -45,6 +45,10 @@ const IframeRouter = () => {
   const isValidFormPage = !!formInputs;
 
   useEffect(() => {
+    if (localStorage.getItem("SHOULD_RESTART")) {
+      localStorage.removeItem("SHOULD_RESTART");
+      window.location.reload();
+    }
     client.onopen = (connection) => {
       console.log(connection);
       console.log("WebSocket Client Connected");

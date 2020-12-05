@@ -20,7 +20,14 @@ export const COLUMNS = (history) => [
     Header: "",
     accessor: "redirectTo",
     Cell: ({ cell }) => (
-      <div onClick={() => history.push(cell.value)}>Visit</div>
+      <div
+        onClick={() => {
+          localStorage.setItem("SHOULD_RESTART", true);
+          history.push(cell.value);
+        }}
+      >
+        Visit
+      </div>
     ),
   },
   {

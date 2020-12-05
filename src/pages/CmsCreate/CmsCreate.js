@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import CmsComponent from "../../components/Cms/CmsComponent";
+import axios from "axios";
 
 import StyledCmsCreate from "./StyledCmsCreate";
 
@@ -11,20 +12,15 @@ const CmsCreate = () => {
   const history = useHistory();
 
   useEffect(() => {
-    setItems([
-      { name: "email", isSelected: true },
-      { name: "phone number", isSelected: false },
-      { name: "address", isSelected: true },
-      { name: "email", isSelected: false },
-      { name: "email", isSelected: false },
-      { name: "email", isSelected: true },
-      { name: "email", isSelected: true },
-      { name: "address", isSelected: true },
-      { name: "email", isSelected: false },
-      { name: "email", isSelected: false },
-      { name: "email", isSelected: true },
-      { name: "email", isSelected: true },
-    ]);
+    fetch(`${process.env.REACT_APP_ENDPOINT}/getAllRequiredKeys`)
+      .then((rawData) => rawData.json())
+      .then((data) => {
+        const newItems = data.map((item) => ({
+          name: item,
+          isSelected: false,
+        }));
+        setItems(newItems);
+      });
   }, []);
 
   const onToggleItem = (index) => {
@@ -34,11 +30,23 @@ const CmsCreate = () => {
   };
 
   const onSubmit = () => {
-    const selectedItems = items
+    const requiredKeys = items
       .filter((item) => item.isSelected)
       .map((filteredItems) => filteredItems.name);
-    console.log({ selectedItems });
-    console.log("submitted!");
+
+    axios
+      .post(`${process.env.REACT_APP_ENDPOINT}/addThirdParties`, {
+        name,
+        managerEmail,
+        requiredKeys,
+      })
+      .then((data) => {
+        history.goBack();
+        console.log({ data });
+      })
+      .catch((err) => {
+        console.log({ err });
+      });
   };
   const onCancel = () => {
     history.push("/cms");

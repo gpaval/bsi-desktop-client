@@ -6,14 +6,23 @@ export const COLUMNS = (history) => [
     accessor: "name",
   },
   {
-    Header: "ID",
-    accessor: "token",
+    Header: "Permissions",
+    accessor: "requiredKeys",
+    Cell: ({ cell }) => (
+      <>
+        {((cell && cell.value) || []).map((value) => (
+          <div key={value}>{value}</div>
+        ))}
+      </>
+    ),
   },
   {
-    Header: "R/W Permission",
-    accessor: "permission",
+    Header: "",
+    accessor: "redirectTo",
+    Cell: ({ cell }) => (
+      <div onClick={() => history.push(cell.value)}>Visit</div>
+    ),
   },
-
   {
     height: 80,
     Header: "",
@@ -21,7 +30,7 @@ export const COLUMNS = (history) => [
     Cell: ({ cell }) => (
       <ButtonComponent
         width={"97px"}
-        height={"28x"}
+        height={"40px"}
         text={"more info"}
         onClick={() => history.push(`/cms-update/${cell.value}`)}
       />

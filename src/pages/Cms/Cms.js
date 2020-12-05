@@ -9,12 +9,16 @@ const Cms = () => {
   const [thirdParties, setThirdParties] = useState([]);
 
   useEffect(() => {
-    fetch(
-      "https://16wdwjr6pj.execute-api.eu-central-1.amazonaws.com/dev/listThirdParties"
-    )
+    fetch(`${process.env.REACT_APP_ENDPOINT}/listThirdParties`)
       .then((rawData) => rawData.json())
       .then((data) => {
-        setThirdParties(data);
+        if (Array.isArray(data)) {
+          const parsedData = data.map((rawData) => ({
+            redirectTo: `/iframe?iFramePageType=qrCode&thirdPartyToken=${rawData.id}`,
+            ...rawData,
+          }));
+          setThirdParties(parsedData);
+        }
       });
   }, []);
 

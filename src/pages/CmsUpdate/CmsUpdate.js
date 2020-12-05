@@ -12,26 +12,13 @@ const CmsUpdate = () => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    setItems([
-      { name: "email", isSelected: false },
-      { name: "phone number", isSelected: false },
-      { name: "firstName", isSelected: false },
-      { name: "lastName", isSelected: false },
-      { name: "email1", isSelected: false },
-      { name: "email2", isSelected: false },
-      { name: "email3", isSelected: false },
-    ]);
-
-    fetch(
-      `https://16wdwjr6pj.execute-api.eu-central-1.amazonaws.com/dev/getThirdParty?id=${id}`
-    )
+    fetch(`${process.env.REACT_APP_ENDPOINT}/getThirdParty?id=${id}`)
       .then((rawData) => rawData.json())
       .then((data) => {
-        const newItems = [...items];
-
-        newItems.forEach((item) => {
-          item.isSelected = data.requiredKeys.includes(item.name);
-        });
+        const newItems = data.requiredKeys.map((item) => ({
+          name: item,
+          isSelected: false,
+        }));
 
         setItems(newItems);
         setName(data.name);

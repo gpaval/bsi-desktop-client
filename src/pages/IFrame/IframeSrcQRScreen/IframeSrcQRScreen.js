@@ -11,9 +11,7 @@ const IframeSrcQRScreen = ({ userToken, connectionId }) => {
   const [entityToken, setEntityToken] = useState("");
 
   const getOrganizationData = () => {
-    fetch(
-      `https://16wdwjr6pj.execute-api.eu-central-1.amazonaws.com/dev/getThirdParty?id=${userToken}`
-    )
+    fetch(`${process.env.REACT_APP_ENDPOINT}/getThirdParty?id=${userToken}`)
       .then((rawData) => rawData.json())
       .then((data) => {
         setEntityToken(data.token);

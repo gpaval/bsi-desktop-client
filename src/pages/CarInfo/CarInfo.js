@@ -12,6 +12,7 @@ import "react-vertical-timeline-component/style.min.css";
 import maintenanceIcon from "../../assets/images/maintenance.svg";
 import creationIcon from "../../assets/images/creation.svg";
 import { useHistory, useLocation } from "react-router-dom";
+import Modal from "../Modal/Modal";
 
 const icons = {
   maintenanceIcon: maintenanceIcon,
@@ -21,6 +22,8 @@ const icons = {
 const CarInfo = () => {
   const onSubmit = () => {};
   const [carName, setCarName] = useState("");
+  const [isModalOpened, setIsModalOpened] = useState(false);
+
   const history = useHistory();
   const location = useLocation();
   console.log(location.state);
@@ -49,17 +52,42 @@ const CarInfo = () => {
     },
   ];
 
+  const onCancelModal = () => null;
+
   return (
     <StyledCarInfo>
+      <Modal show={isModalOpened}>
+        <div className="modal">
+          <div className="modal__button">
+            <ButtonComponent
+              text={"Close"}
+              width={"97px"}
+              height={"28px"}
+              onClick={onCancelModal}
+            />
+          </div>
+          <div className="modal__title">Car logs</div>
+          <div className="modal-content"></div>
+        </div>
+      </Modal>
       <div className="car-info">
         <div className="car-info-header">
           <div className="car-info-header__title">{carName}</div>
-          <ButtonComponent
-            text={"New maintenance"}
-            width={"97px"}
-            height={"28px"}
-            onClick={() => history.push("/new-maintenance")}
-          />
+          <div>
+            <ButtonComponent
+              text={"Close"}
+              width={"97px"}
+              height={"28px"}
+              onClick={onCancelModal}
+            />
+            <div style={{ width: "30px" }}></div>
+            <ButtonComponent
+              text={"New maintenance"}
+              width={"97px"}
+              height={"28px"}
+              onClick={() => history.push("/new-maintenance")}
+            />
+          </div>
         </div>
         <hr />
         <div className="car-info-details">

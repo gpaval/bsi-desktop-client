@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Card from "../../components/Card/Card";
 
@@ -8,7 +8,18 @@ const SelectCar = () => {
   const history = useHistory();
   const location = useLocation();
 
-  console.log();
+  const [cars, setCars] = useState([]);
+
+  useEffect(() => {
+    fetch(
+      `${process.env.REACT_APP_ENDPOINT}/listVehicles?proprietarEmail=${location.state.email}`
+    )
+      .then((rawData) => rawData.json())
+      .then((data) => {
+        setCars(data);
+      });
+  }, []);
+
   const goTo = (id) => {
     history.push({
       pathname: `/carInfo/${id}`,
@@ -17,19 +28,6 @@ const SelectCar = () => {
       },
     });
   };
-
-  const mockData = [
-    {
-      title: "GOLF IV",
-      token: "1312OJNMKJVLOOIPI1I0234",
-      id: 1,
-    },
-    {
-      title: "GOLF V",
-      token: "nknakjdnajksdnjksandk1322",
-      id: 2,
-    },
-  ];
 
   return (
     <StyledSelectCar>
@@ -41,12 +39,12 @@ const SelectCar = () => {
         </div>
         <hr />
         <div className="select-car-content">
-          {mockData.map((card) => (
+          {cars.map((car) => (
             <div className="select-car-content__item">
               <Card
-                title={card.title}
-                extraInfo={card.token}
-                onClick={() => goTo(card.id)}
+                title={car.model}
+                extraInfo={car.VIN}
+                onClick={() => goTo(car.VIN)}
               />
             </div>
           ))}

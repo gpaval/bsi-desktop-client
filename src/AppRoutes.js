@@ -5,6 +5,7 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
+import WithAuth from "./hocs/withAuth";
 import CarInfo from "./pages/CarInfo/CarInfo";
 import Cms from "./pages/Cms/Cms";
 import CmsCreate from "./pages/CmsCreate/CmsCreate";
@@ -20,7 +21,7 @@ function AppRoutes() {
     <Router>
       <Switch>
         <Route path={"/iframe"}>
-          <IframeRouter />
+          <WithAuth component={IframeRouter} />
         </Route>
         <Route path={"/cms"}>
           <Cms />

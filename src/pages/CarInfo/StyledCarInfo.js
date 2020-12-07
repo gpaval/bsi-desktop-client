@@ -1,6 +1,18 @@
 import styled from "styled-components";
 
 const StyledCarInfo = styled.div`
+  .modal {
+    &__button {
+      position: relative;
+      right: 20px;
+    }
+    &__title {
+      margin-right: 36px;
+      margin-top: 40px;
+      font-weight: 700;
+      font-size: 30px;
+    }
+  }
   .vertical-timeline::before {
     background: #ff4834 !important;
   }

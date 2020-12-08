@@ -81,9 +81,7 @@ const IframeRouter = () => {
       if (receivedData && receivedData.type === TYPES.registering) {
         try {
           const parsedData = JSON.parse(data);
-          const parsedMessage = (JSON.parse(parsedData.message) || []).flat(
-            1
-          )[0];
+          const parsedMessage = JSON.parse(parsedData.message) || {};
           createCookie(storageConstants.sessionCookie, "value", 15);
           const url = window.location.pathname + window.location.search;
 

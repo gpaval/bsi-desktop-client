@@ -47,7 +47,7 @@ const StyledCmsComponent = styled.div`
         align-items: center;
 
         &__item {
-          width: 97px;
+          width: fit-content;
           height: 28px;
           border: 0.2px solid #000000;
           box-sizing: border-box;

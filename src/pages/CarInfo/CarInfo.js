@@ -23,6 +23,7 @@ const icons = {
 const CarInfo = () => {
   const onSubmit = () => {};
   const [carName, setCarName] = useState("");
+  const [carDetails, setCarDetails] = useState({});
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [roadMapElements, setRoadMapElements] = useState([]);
 
@@ -34,8 +35,16 @@ const CarInfo = () => {
     axios
       .get(`${process.env.REACT_APP_ENDPOINT}/getVehicleHistory?vin=${carId}`)
       .then(({ data }) => {
+        const processedData = data.map(({ data }) => data);
+        processedData.sort((a, b) => b.date - a.date);
+        setRoadMapElements(processedData);
+      });
+
+    axios
+      .get(`${process.env.REACT_APP_ENDPOINT}/getVehicleDetails?vin=${carId}`)
+      .then(({ data }) => {
         console.log(data);
-        setRoadMapElements(data);
+        setCarDetails(data._resultList[0]);
       });
   }, []);
 
@@ -79,12 +88,16 @@ const CarInfo = () => {
         <hr />
         <div className="car-info-details">
           <div className="car-info-details__detail">
-            VIN: XXXXXXXXXXXXXXXXXXXXX
+            {(Object.entries(carDetails) || []).map(([key, value]) => (
+              <div>
+                {key}: {value}
+              </div>
+            ))}
           </div>
         </div>
         <div className="car-info__road-map">
           <VerticalTimeline>
-            {roadMapElements.map(({ data: element }, key) => (
+            {roadMapElements.map((element, key) => (
               <VerticalTimelineElement
                 key={key}
                 className="vertical-timeline-element--work"
@@ -103,22 +116,22 @@ const CarInfo = () => {
                   paddingLeft: "1px",
                   fontSize: "21px",
                 }}
-                // icon={
-                //   <img className="timeline__icon" src={icons[element.icon]} />
-                // }
+                icon={
+                  <img className="timeline__icon" src={icons[element.icon]} />
+                }
                 onTimelineElementClick={() =>
                   element.onclick && element.onclick()
                 }
               >
                 <h3 className="vertical-timeline-element-title">
-                  {element.data}
+                  {element.date}
                 </h3>
                 <h4 className="vertical-timeline-element-subtitle">
                   {element.serviceName}
                 </h4>
                 <div>
-                  <div>{element.kilometraj}</div>
-                  <div>{element.constatari}</div>
+                  <div>{element.kilometers} KMs</div>
+                  <div>{element.details}</div>
                 </div>
               </VerticalTimelineElement>
             ))}

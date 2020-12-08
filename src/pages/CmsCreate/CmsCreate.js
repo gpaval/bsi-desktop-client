@@ -17,7 +17,7 @@ const CmsCreate = () => {
       .then((data) => {
         const newItems = data.map((item) => ({
           name: item,
-          isSelected: false,
+          status: item === "userId" ? 2 : 0,
         }));
         setItems(newItems);
       });
@@ -25,20 +25,37 @@ const CmsCreate = () => {
 
   const onToggleItem = (index) => {
     const newItems = [...items];
-    newItems[index].isSelected = !newItems[index].isSelected;
+    newItems[index].status =
+      newItems[index].status === 2 ? 0 : newItems[index].status + 1;
+
     setItems(newItems);
   };
 
   const onSubmit = () => {
-    const requiredKeys = items
-      .filter((item) => item.isSelected)
-      .map((filteredItems) => filteredItems.name);
+    const requiredPermissions = [];
+    const optionalPermissions = [];
+
+    items.forEach((item) => {
+      if (item.status === 1) {
+        optionalPermissions.push(item.name);
+      }
+      if (item.status === 2) {
+        requiredPermissions.push(item.name);
+      }
+    });
+
+    if (requiredPermissions.length === 0) requiredPermissions.push("userId");
 
     axios
       .post(`${process.env.REACT_APP_ENDPOINT}/addThirdParties`, {
         name,
         managerEmail,
-        requiredKeys,
+        requiredKeys: [
+          {
+            requiredPermissions,
+            optionalPermissions,
+          },
+        ],
       })
       .then((data) => {
         history.goBack();

@@ -4,6 +4,18 @@ import InputComponent from "../InputComponent/InputComponent";
 
 import StyledCmsComponent from "./StyledCmsComponent";
 
+const getItemStatus = (status) => {
+  if (status === 0) {
+    return;
+  }
+  if (status === 1) {
+    return "cms-body-selector__item--optional";
+  }
+  if (status === 2) {
+    return "cms-body-selector__item--mandatory";
+  }
+};
+
 const CmsComponent = ({
   isAdd = true,
   name,
@@ -13,6 +25,7 @@ const CmsComponent = ({
   items,
   onItemSelect,
   onSubmit,
+  onRemove,
   onCancel,
 }) => {
   return (
@@ -22,11 +35,13 @@ const CmsComponent = ({
           <div className="cms-header__title">
             {`${(isAdd && "Add") || "Edit"}`}
           </div>
+
           <ButtonComponent
-            text={`${(isAdd && "Create") || "Submit"}`}
+            text={"Cancel"}
             width={"97px"}
             height={"28px"}
-            onClick={onSubmit}
+            onClick={onCancel}
+            type={"white"}
           />
         </div>
         <hr />
@@ -52,29 +67,63 @@ const CmsComponent = ({
                 </div>
               )}
             </div>
-            <div className="cms-body-grid__right">
-              <div className="cms-body-selector">
-                {(items || []).map((item, index) => (
-                  <div
-                    onClick={() => onItemSelect(index)}
-                    className={`cms-body-selector__item ${
-                      item.isSelected && "cms-body-selector__item--selected"
-                    }`}
-                  >
-                    {item.name}
-                  </div>
-                ))}
+
+            <div>
+              <div className="cms-body-grid-legend">
+                <div className="cms-body-grid-legend-item">
+                  <div className="cms-body-grid-legend-item__ball cms-body-grid-legend-item__ball--unselected"></div>{" "}
+                  Unselected
+                </div>
+                <div className="cms-body-grid-legend-item">
+                  <div className="cms-body-grid-legend-item__ball cms-body-grid-legend-item__ball--optional"></div>{" "}
+                  Optional
+                </div>{" "}
+                <div className="cms-body-grid-legend-item">
+                  <div className="cms-body-grid-legend-item__ball cms-body-grid-legend-item__ball--mandatory"></div>{" "}
+                  Mandatory
+                </div>
+              </div>
+              <div className="cms-body-grid__right">
+                <div className="cms-body-selector">
+                  {(items || []).map((item, index) => (
+                    <div
+                      style={{
+                        ...(item.name === "userId" && {
+                          pointerEvents: "none",
+                          opacity: "50%",
+                        }),
+                      }}
+                      onClick={() => onItemSelect(index)}
+                      className={`cms-body-selector__item 
+                    ${getItemStatus(item.status)}
+                    `}
+                    >
+                      {item.name}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
         <div className="cms__bottom">
+          {!isAdd && (
+            <>
+              <ButtonComponent
+                text={"Remove"}
+                width={"97px"}
+                type={"white"}
+                height={"28px"}
+                onClick={onRemove}
+              />
+              <span style={{ marginRight: "20px" }} />
+            </>
+          )}
           <ButtonComponent
-            text={"Cancel"}
+            text={`${(isAdd && "Create") || "Submit"}`}
             width={"97px"}
             height={"28px"}
-            onClick={onCancel}
-            type={"white"}
+            onClick={onSubmit}
           />
         </div>
       </div>

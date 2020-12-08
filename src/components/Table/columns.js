@@ -1,6 +1,10 @@
 import storageConstants from "../../constants/storageConstants";
 import ButtonComponent from "../Button/Button";
 
+const concatData = ({ optionalPermissions = [], requiredPermissions = [] }) => {
+  return [...optionalPermissions, ...requiredPermissions];
+};
+
 export const COLUMNS = (history) => [
   {
     Header: "Name",
@@ -11,9 +15,10 @@ export const COLUMNS = (history) => [
     accessor: "requiredKeys",
     Cell: ({ cell }) => (
       <>
-        {((cell && cell.value) || []).map((value) => (
-          <div key={value}>{value}</div>
-        ))}
+        {Array.isArray(cell.value) &&
+          concatData(cell.value[0]).map(
+            (value) => !console.log(value) && <div key={value}>{value}</div>
+          )}
       </>
     ),
   },

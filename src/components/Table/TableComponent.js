@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import { useTable } from "react-table";
-import MOCK_DATA from "./MOCK_DATA.json";
 import { COLUMNS } from "./columns";
 import StyledTable from "./StyledTable";
 import { useHistory } from "react-router-dom";

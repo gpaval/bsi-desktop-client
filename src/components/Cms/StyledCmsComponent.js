@@ -1,6 +1,38 @@
 import styled from "styled-components";
 
 const StyledCmsComponent = styled.div`
+  .cms-body-grid-legend {
+    display: flex;
+    width: 400px;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    &-item {
+      display: flex;
+
+      &__ball {
+        border: 1px solid black;
+        border-radius: 10px;
+        width: 15px;
+        height: 15px;
+        margin-right: 10px;
+
+        &--unselected {
+          background: white;
+        }
+
+        &--mandatory {
+          color: white;
+          background: #ff4834;
+        }
+
+        &--optional {
+          color: white;
+          background: #2f4858;
+        }
+      }
+    }
+  }
+
   .cms {
     width: 94%;
     margin: 60px auto;
@@ -47,6 +79,14 @@ const StyledCmsComponent = styled.div`
         align-items: center;
 
         &__item {
+          -webkit-touch-callout: none; /* iOS Safari */
+          -webkit-user-select: none; /* Safari */
+          -khtml-user-select: none; /* Konqueror HTML */
+          -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+
           width: fit-content;
           height: 28px;
           border: 0.2px solid #000000;
@@ -57,9 +97,14 @@ const StyledCmsComponent = styled.div`
           margin-right: 30px;
           padding: 10px;
           margin-bottom: 30px;
-          &--selected {
+          &--mandatory {
             color: white;
             background: #ff4834;
+          }
+
+          &--optional {
+            color: white;
+            background: #2f4858;
           }
         }
       }

@@ -17,6 +17,7 @@ const Cms = () => {
             redirectTo: `/iframe?iFramePageType=qrCode&thirdPartyToken=${rawData.id}`,
             ...rawData,
           }));
+
           setThirdParties(parsedData);
         }
       });

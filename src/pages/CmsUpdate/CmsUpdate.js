@@ -22,7 +22,12 @@ const CmsUpdate = () => {
           .then((data) => {
             const newItems = allKeys.map((item) => ({
               name: item,
-              isSelected: data.requiredKeys.includes(item),
+              status:
+                (data.requiredKeys[0].optionalPermissions.includes(item) &&
+                  1) ||
+                (data.requiredKeys[0].requiredPermissions.includes(item) &&
+                  2) ||
+                0,
             }));
 
             setExtraData({
@@ -37,21 +42,36 @@ const CmsUpdate = () => {
 
   const onToggleItem = (index) => {
     const newItems = [...items];
-    newItems[index].isSelected = !newItems[index].isSelected;
+    newItems[index].status =
+      newItems[index].status === 2 ? 0 : newItems[index].status + 1;
+
     setItems(newItems);
   };
 
   const onSubmit = () => {
-    const requiredKeys = items
-      .filter((item) => item.isSelected)
-      .map((filteredItems) => filteredItems.name);
+    const requiredPermissions = [];
+    const optionalPermissions = [];
+
+    items.forEach((item) => {
+      if (item.status === 1) {
+        optionalPermissions.push(item.name);
+      }
+      if (item.status === 2) {
+        requiredPermissions.push(item.name);
+      }
+    });
 
     axios
       .post(`${process.env.REACT_APP_ENDPOINT}/editThirdParty`, {
         id: extraData.id,
         managerEmail: extraData.managerEmail,
         name,
-        requiredKeys,
+        requiredKeys: [
+          {
+            requiredPermissions,
+            optionalPermissions,
+          },
+        ],
       })
       .then((data) => {
         history.goBack();
@@ -67,6 +87,19 @@ const CmsUpdate = () => {
     history.push("/cms");
   };
 
+  const onRemove = () => {
+    axios
+      .post(
+        `${process.env.REACT_APP_ENDPOINT}/deleteThirdParty?id=${extraData.id}`
+      )
+      .then(() => {
+        history.goBack();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <StyledCmsUpdate>
       <CmsComponent
@@ -77,6 +110,7 @@ const CmsUpdate = () => {
         onItemSelect={(index) => onToggleItem(index)}
         onSubmit={onSubmit}
         onCancel={onCancel}
+        onRemove={onRemove}
       />
     </StyledCmsUpdate>
   );

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Card from "../../components/Card/Card";
+import AxiosInstance from "../../utils/axiosUtils";
 
 import StyledSelectCar from "./StyledSelectCar";
 
@@ -11,13 +12,11 @@ const SelectCar = () => {
   const [cars, setCars] = useState([]);
 
   useEffect(() => {
-    fetch(
-      `${process.env.REACT_APP_ENDPOINT}/listVehicles?proprietarEmail=${location.state.email}`
-    )
-      .then((rawData) => rawData.json())
-      .then((data) => {
-        setCars(data);
-      });
+    AxiosInstance.get(`/listVehicles?uid=${location.state.userId}`).then(
+      (data) => {
+        console.log(data);
+      }
+    );
   }, []);
 
   const goTo = (id) => {
@@ -33,9 +32,17 @@ const SelectCar = () => {
     <StyledSelectCar>
       <div className="select-car">
         <div className="select-car-header">
-          <div className="select-car-header__title">
-            current client: {location.state.firstName} {location.state.lastName}
-          </div>
+          {(location.state.firstName || location.state.lastName) && (
+            <div className="select-car-header__title">
+              current client:
+              {location.state.firstName && (
+                <span>{location.state.firstName}</span>
+              )}{" "}
+              {location.state.lastName && (
+                <span>{location.state.lastName}</span>
+              )}{" "}
+            </div>
+          )}
         </div>
         <hr />
         <div className="select-car-content">

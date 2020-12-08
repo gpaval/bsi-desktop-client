@@ -49,9 +49,6 @@ const IframeSrcQRScreen = ({ userToken, connectionId }) => {
           />
 
           <div className="qr-page-footer">
-            {/* <div className="qr-page-footer__element">
-              Entity token: {entityToken}
-            </div> */}
             <div className="qr-page-footer__element">
               Entity name: {organizationInfo.name}
             </div>

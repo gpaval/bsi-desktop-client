@@ -6,6 +6,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import WithAuth from "./hocs/withAuth";
+import WithSessionCookie from "./hocs/withSessionCookie";
 import CarInfo from "./pages/CarInfo/CarInfo";
 import Cms from "./pages/Cms/Cms";
 import CmsCreate from "./pages/CmsCreate/CmsCreate";
@@ -33,16 +34,16 @@ function AppRoutes() {
           <CmsUpdate />
         </Route>
         <Route path="/successfully">
-          <SuccessfullyAuthed />
+          <WithSessionCookie component={SuccessfullyAuthed} />
         </Route>
         <Route path="/carInfo/:carId">
-          <CarInfo />
+          <WithSessionCookie component={CarInfo} />
         </Route>
         <Route path="/selectCar">
-          <SelectCar />
+          <WithSessionCookie component={SelectCar} />
         </Route>
         <Route path="/new-maintenance">
-          <NewMaintenance />
+          <WithSessionCookie component={NewMaintenance} />
         </Route>
         <Redirect to={"/"} />
       </Switch>

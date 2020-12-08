@@ -40,6 +40,10 @@ const StyledCarInfo = styled.div`
         text-align: left;
         color: #ff4834;
       }
+
+      &__buttons {
+        display: flex;
+      }
     }
 
     &-details {

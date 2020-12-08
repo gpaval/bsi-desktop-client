@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ButtonComponent from "../../components/Button/Button";
 
 import StyledCarInfo from "./StyledCarInfo";
@@ -11,8 +11,9 @@ import {
 import "react-vertical-timeline-component/style.min.css";
 import maintenanceIcon from "../../assets/images/maintenance.svg";
 import creationIcon from "../../assets/images/creation.svg";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import Modal from "../Modal/Modal";
+import axios from "axios";
 
 const icons = {
   maintenanceIcon: maintenanceIcon,
@@ -23,34 +24,20 @@ const CarInfo = () => {
   const onSubmit = () => {};
   const [carName, setCarName] = useState("");
   const [isModalOpened, setIsModalOpened] = useState(false);
+  const [roadMapElements, setRoadMapElements] = useState([]);
 
   const history = useHistory();
-  const location = useLocation();
-  console.log(location.state);
+  const { carId } = useParams();
+  console.log(carId);
 
-  const roadMapElements = [
-    {
-      date: "1",
-      location: "asdasd",
-      km: "23 000",
-      information: "",
-      icon: "maintenanceIcon",
-    },
-    {
-      date: "2",
-      location: "asdasd",
-      km: "23 000",
-      information: "",
-      icon: "maintenanceIcon",
-    },
-    {
-      date: "3",
-      location: "asdasd",
-      km: "23 000",
-      information: "",
-      icon: "creationIcon",
-    },
-  ];
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_ENDPOINT}/getVehicleHistory?vin=${carId}`)
+      .then(({ data }) => {
+        console.log(data);
+        setRoadMapElements(data);
+      });
+  }, []);
 
   const onCancelModal = () => null;
 
@@ -63,7 +50,7 @@ const CarInfo = () => {
               text={"Close"}
               width={"97px"}
               height={"28px"}
-              onClick={onCancelModal}
+              onClick={() => setIsModalOpened(false)}
             />
           </div>
           <div className="modal__title">Car logs</div>
@@ -73,12 +60,12 @@ const CarInfo = () => {
       <div className="car-info">
         <div className="car-info-header">
           <div className="car-info-header__title">{carName}</div>
-          <div>
+          <div className="car-info-header__buttons">
             <ButtonComponent
-              text={"Close"}
+              text={"See car logs"}
               width={"97px"}
               height={"28px"}
-              onClick={onCancelModal}
+              onClick={() => setIsModalOpened(true)}
             />
             <div style={{ width: "30px" }}></div>
             <ButtonComponent
@@ -97,7 +84,7 @@ const CarInfo = () => {
         </div>
         <div className="car-info__road-map">
           <VerticalTimeline>
-            {roadMapElements.map((element, key) => (
+            {roadMapElements.map(({ data: element }, key) => (
               <VerticalTimelineElement
                 key={key}
                 className="vertical-timeline-element--work"
@@ -116,22 +103,22 @@ const CarInfo = () => {
                   paddingLeft: "1px",
                   fontSize: "21px",
                 }}
-                icon={
-                  <img className="timeline__icon" src={icons[element.icon]} />
-                }
+                // icon={
+                //   <img className="timeline__icon" src={icons[element.icon]} />
+                // }
                 onTimelineElementClick={() =>
                   element.onclick && element.onclick()
                 }
               >
                 <h3 className="vertical-timeline-element-title">
-                  {element.date}
+                  {element.data}
                 </h3>
                 <h4 className="vertical-timeline-element-subtitle">
-                  {element.location}
+                  {element.serviceName}
                 </h4>
                 <div>
-                  <div>{element.km}</div>
-                  <div>{element.information}</div>
+                  <div>{element.kilometraj}</div>
+                  <div>{element.constatari}</div>
                 </div>
               </VerticalTimelineElement>
             ))}

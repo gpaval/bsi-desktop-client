@@ -5,6 +5,7 @@ import iFrameConstants from "../../constants/iframeConstants";
 import IframeSrcFormScreen from "./IframeSrcFormularScreen/IframeSrcFormScreen";
 import IframeSrcQRScreen from "./IframeSrcQRScreen/IframeSrcQRScreen";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
+import storageConstants from "../../constants/storageConstants";
 
 const client = new W3CWebSocket(process.env.REACT_APP_WS);
 
@@ -22,6 +23,17 @@ const TYPES = {
   connectionID: "connectionId",
   registering: "registering",
 };
+
+function createCookie(name, value, minutes) {
+  if (minutes) {
+    var date = new Date();
+    date.setTime(date.getTime() + minutes * 60 * 1000);
+    var expires = "; expires=" + date.toGMTString();
+  } else {
+    var expires = "";
+  }
+  document.cookie = name + "=" + value + expires + "; path=/";
+}
 
 const IframeRouter = () => {
   const history = useHistory();
@@ -45,8 +57,8 @@ const IframeRouter = () => {
   const isValidFormPage = !!formInputs;
 
   useEffect(() => {
-    if (localStorage.getItem("SHOULD_RESTART")) {
-      localStorage.removeItem("SHOULD_RESTART");
+    if (localStorage.getItem(storageConstants.shouldRestart)) {
+      localStorage.removeItem(storageConstants.shouldRestart);
       window.location.reload();
     }
     client.onopen = (connection) => {
@@ -72,6 +84,11 @@ const IframeRouter = () => {
           const parsedMessage = (JSON.parse(parsedData.message) || []).flat(
             1
           )[0];
+          createCookie(storageConstants.sessionCookie, "value", 15);
+          const url = window.location.pathname + window.location.search;
+
+          localStorage.setItem(storageConstants.registerURL, url);
+
           history.push({
             pathname: "/successfully",
             state: {

@@ -1,3 +1,4 @@
+import storageConstants from "../../constants/storageConstants";
 import ButtonComponent from "../Button/Button";
 
 export const COLUMNS = (history) => [
@@ -22,7 +23,7 @@ export const COLUMNS = (history) => [
     Cell: ({ cell }) => (
       <div
         onClick={() => {
-          localStorage.setItem("SHOULD_RESTART", true);
+          localStorage.setItem(storageConstants.shouldRestart, true);
           history.push(cell.value);
         }}
       >

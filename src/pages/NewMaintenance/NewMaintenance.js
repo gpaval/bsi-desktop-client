@@ -16,6 +16,7 @@ const NewMaintenance = () => {
 
   const [numberOfKm, setNumberOfKm] = useState("");
   const [extraInfo, setExtraInfo] = useState("");
+  const [error, setError] = useState("");
 
   const onSubmit = () => {
     AxiosInstance.post(
@@ -28,9 +29,17 @@ const NewMaintenance = () => {
         details: extraInfo,
         icon: "maintenanceIcon",
       }
-    ).then(({ data }) => {
-      history.goBack();
-    });
+    )
+      .then(({ data }) => {
+        if (data.errorMessage === "Wrong kilometers") {
+          setError("Wrong number of KMs.");
+        } else {
+          history.goBack();
+        }
+      })
+      .catch((err) => {
+        console.log({ err });
+      });
   };
 
   return (
@@ -54,6 +63,7 @@ const NewMaintenance = () => {
               label={"Number of KM"}
               width="99%"
             />
+            <div className="cms-body__error">{error}</div>
           </div>
           <div className="cms-body__input">
             <InputComponent

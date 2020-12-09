@@ -166,7 +166,7 @@ const CarInfo = () => {
                       <div>{element.kilometers} KMs</div>
                       <br />
 
-                      {element.details.split(/\r?\n/).map((detail) => (
+                      {(element.details || "").split(/\r?\n/).map((detail) => (
                         <div>{detail}</div>
                       ))}
                     </div>

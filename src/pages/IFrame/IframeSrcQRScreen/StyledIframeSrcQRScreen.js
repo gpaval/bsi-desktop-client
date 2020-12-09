@@ -3,6 +3,22 @@ import styled from "styled-components";
 const StyledIframeSrcQRScreen = styled.div`
   width: 100%;
   text-align: center;
+  .modal {
+    &__button {
+      position: relative;
+      right: 20px;
+    }
+    &__title {
+      margin-right: 36px;
+      margin-top: 40px;
+      font-weight: 700;
+      font-size: 30px;
+    }
+    &-content {
+      margin-right: 40px;
+      margin-top: 62px;
+    }
+  }
   .qr-page {
     margin-top: 104px;
 

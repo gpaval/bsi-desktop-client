@@ -27,6 +27,7 @@ const StyledModal = styled.div`
   }
 
   &.modal--closed {
+    display: none;
     animation: closeModal 0.4s ease-out forwards;
   }
 

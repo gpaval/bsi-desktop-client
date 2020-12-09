@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import StyledIframeSrcQRScreen from "./StyledIframeSrcQRScreen";
 import lockIcon from "../../../assets/images/lock.svg";
+import ButtonComponent from "../../../components/Button/Button";
+import Modal from "../../Modal/Modal";
+import AxiosInstance from "../../../utils/axiosUtils";
 
 const QRCode = require("qrcode.react");
 
@@ -9,10 +12,10 @@ const IframeSrcQRScreen = ({
   connectionId,
   setOrganizationName,
 }) => {
-  const [organizationInfo, setOrganizationInfo] = useState({
-    name: "",
-  });
+  const [organizationInfo, setOrganizationInfo] = useState({});
   const [entityToken, setEntityToken] = useState("");
+  const [isModalOpened, setIsModalOpened] = useState(false);
+  const [carLogs, setCarLogs] = useState([]);
 
   const getOrganizationData = () => {
     fetch(`${process.env.REACT_APP_ENDPOINT}/getThirdParty?id=${userToken}`)
@@ -28,20 +31,52 @@ const IframeSrcQRScreen = ({
         });
 
         setOrganizationName(data.name);
+
+        AxiosInstance.get(
+          `${process.env.REACT_APP_ENDPOINT}/getServiceReport?service=${data.name}`
+        ).then(({ data }) => {
+          setCarLogs(data);
+        });
       });
   };
 
   useEffect(() => {
-    console.log("here!");
     if (connectionId) {
       getOrganizationData();
     }
   }, [connectionId]);
-
   return (
     <StyledIframeSrcQRScreen>
-      {(!!Object.keys(organizationInfo).length !== 0 && (
+      {(Object.keys(organizationInfo).length !== 0 && (
         <div className="qr-page">
+          <Modal show={isModalOpened}>
+            <div className="modal">
+              <div className="modal__button">
+                <ButtonComponent
+                  text={"Close"}
+                  width={"97px"}
+                  height={"28px"}
+                  onClick={() => setIsModalOpened(false)}
+                />
+              </div>
+              <div className="modal__title">Service logs</div>
+              <div className="modal-content">
+                {carLogs.map(
+                  (log) =>
+                    log.changes.length !== 0 && (
+                      <>
+                        <br />
+                        <b> {new Date(log.date).toLocaleDateString()}</b>
+                        <>
+                          <div>{log.changes}</div>
+                        </>
+                      </>
+                    )
+                )}
+              </div>
+            </div>
+          </Modal>
+
           <div className="qr-page__title qr-page--themed">Welcome</div>
           <div className="qr-page__subtitle">
             please register with your{" "}
@@ -61,6 +96,14 @@ const IframeSrcQRScreen = ({
             <div className="qr-page-footer__element">
               <img src={lockIcon} className="qr-page-footer__element--image" />
               Blockchain secured
+              <br />
+              <br />
+              <ButtonComponent
+                text={"See Service Logs"}
+                width={"150px"}
+                height={"50px"}
+                onClick={() => setIsModalOpened(true)}
+              />
             </div>
           </div>
         </div>

@@ -9,6 +9,7 @@ export const COLUMNS = (history) => [
   {
     Header: "Name",
     accessor: "name",
+    Cell: ({ cell }) => <div className="table-text">{cell.value}</div>,
   },
   {
     Header: "Permissions",
@@ -16,9 +17,11 @@ export const COLUMNS = (history) => [
     Cell: ({ cell }) => (
       <>
         {Array.isArray(cell.value) &&
-          concatData(cell.value[0]).map(
-            (value) => !console.log(value) && <div key={value}>{value}</div>
-          )}
+          concatData(cell.value[0]).map((value) => (
+            <div className="table-text" key={value}>
+              {value}
+            </div>
+          ))}
       </>
     ),
   },
@@ -26,14 +29,17 @@ export const COLUMNS = (history) => [
     Header: "",
     accessor: "redirectTo",
     Cell: ({ cell }) => (
-      <div
+      <ButtonComponent
+        width={"97px"}
+        height={"40px"}
+        text={"Visit"}
+        type={"white"}
         onClick={() => {
-          localStorage.setItem(storageConstants.shouldRestart, true);
-          history.push(cell.value);
+          const url = window.location.origin + cell.value;
+          const win = window.open(url, "_blank");
+          win.focus();
         }}
-      >
-        Visit
-      </div>
+      />
     ),
   },
   {
@@ -44,7 +50,7 @@ export const COLUMNS = (history) => [
       <ButtonComponent
         width={"97px"}
         height={"40px"}
-        text={"more info"}
+        text={"Update"}
         onClick={() => history.push(`/cms-update/${cell.value}`)}
       />
     ),

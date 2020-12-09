@@ -26,6 +26,9 @@ const StyledCmsComponent = styled.div`
       &__input {
         margin: 20px 0px;
       }
+      &__error {
+        color: red;
+      }
     }
 
     &__table {

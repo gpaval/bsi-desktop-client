@@ -88,7 +88,7 @@ const IframeRouter = () => {
         try {
           const parsedData = JSON.parse(data);
           const parsedMessage = JSON.parse(parsedData.message) || {};
-          createCookie(storageConstants.sessionCookie, "value", 15);
+          createCookie(storageConstants.sessionCookie, "value", 10);
           const url = window.location.pathname + window.location.search;
 
           localStorage.setItem(storageConstants.registerURL, url);

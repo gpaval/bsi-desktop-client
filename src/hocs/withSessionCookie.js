@@ -15,9 +15,9 @@ const WithSessionCookie = ({ component: Component }) => {
     const interval = setInterval(() => {
       const cookie = getCookie(storageConstants.sessionCookie);
       if (!cookie) {
-        // localStorage.setItem(storageConstants.shouldRestart, true);
-        // const url = localStorage.getItem(storageConstants.registerURL);
-        // history.push(url);
+        localStorage.setItem(storageConstants.shouldRestart, true);
+        const url = localStorage.getItem(storageConstants.registerURL);
+        history.push(url);
       }
     }, 100);
     return () => clearInterval(interval);

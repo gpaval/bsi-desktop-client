@@ -12,6 +12,10 @@ const StyledCarInfo = styled.div`
       font-weight: 700;
       font-size: 30px;
     }
+    &-content {
+      margin-right: 40px;
+      margin-top: 62px;
+    }
   }
   .vertical-timeline::before {
     background: #ff4834 !important;

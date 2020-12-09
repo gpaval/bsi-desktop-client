@@ -1,19 +1,37 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import ButtonComponent from "../../components/Button/Button";
 import InputComponent from "../../components/InputComponent/InputComponent";
+import AxiosInstance from "../../utils/axiosUtils";
 
 import StyledNewMaintenance from "./StyledNewMaintenance";
 
 const NewMaintenance = () => {
   const history = useHistory();
-  const onSubmit = () => {};
+  const location = useLocation();
+
   const onCancel = () => {
     history.goBack();
   };
 
   const [numberOfKm, setNumberOfKm] = useState("");
   const [extraInfo, setExtraInfo] = useState("");
+
+  const onSubmit = () => {
+    AxiosInstance.post(
+      `${process.env.REACT_APP_ENDPOINT}/updateVehicleMaintenance`,
+      {
+        vin: location.state.vin,
+        serviceName: location.state.serviceName,
+        operation: "maintenance",
+        kilometers: numberOfKm,
+        details: extraInfo,
+        icon: "maintenanceIcon",
+      }
+    ).then(({ data }) => {
+      history.goBack();
+    });
+  };
 
   return (
     <StyledNewMaintenance>

@@ -4,7 +4,11 @@ import lockIcon from "../../../assets/images/lock.svg";
 
 const QRCode = require("qrcode.react");
 
-const IframeSrcQRScreen = ({ userToken, connectionId }) => {
+const IframeSrcQRScreen = ({
+  userToken,
+  connectionId,
+  setOrganizationName,
+}) => {
   const [organizationInfo, setOrganizationInfo] = useState({
     name: "",
   });
@@ -22,6 +26,8 @@ const IframeSrcQRScreen = ({ userToken, connectionId }) => {
           connectionId,
           ...data,
         });
+
+        setOrganizationName(data.name);
       });
   };
 

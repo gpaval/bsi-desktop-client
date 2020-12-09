@@ -12,11 +12,11 @@ const SelectCar = () => {
   const [cars, setCars] = useState([]);
 
   useEffect(() => {
-    AxiosInstance.get(`/listVehicles?uid=${location.state.userId}`).then(
-      (data) => {
-        console.log(data);
-      }
-    );
+    AxiosInstance.get(
+      `${process.env.REACT_APP_ENDPOINT}/listVehicles?uid=${location.state.userId}`
+    ).then(({ data }) => {
+      setCars(data);
+    });
   }, []);
 
   const goTo = (id) => {
@@ -32,9 +32,9 @@ const SelectCar = () => {
     <StyledSelectCar>
       <div className="select-car">
         <div className="select-car-header">
-          {(location.state.firstName || location.state.lastName) && (
+          {(location?.state?.firstName || location?.state?.lastName) && (
             <div className="select-car-header__title">
-              current client:
+              current client:{" "}
               {location.state.firstName && (
                 <span>{location.state.firstName}</span>
               )}{" "}

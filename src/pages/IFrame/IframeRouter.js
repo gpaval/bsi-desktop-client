@@ -6,6 +6,7 @@ import IframeSrcFormScreen from "./IframeSrcFormularScreen/IframeSrcFormScreen";
 import IframeSrcQRScreen from "./IframeSrcQRScreen/IframeSrcQRScreen";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import storageConstants from "../../constants/storageConstants";
+import { Auth } from "aws-amplify";
 
 const client = new W3CWebSocket(process.env.REACT_APP_WS);
 
@@ -47,6 +48,8 @@ const IframeRouter = () => {
     setDisplayFormCompletionScreen,
   ] = useState(false);
 
+  const [organizationName, setOrganizationName] = useState("");
+
   const iFramePageType = params.get("iFramePageType");
   const userToken = params.get("thirdPartyToken");
   const formInputsData = params.get("formInputs");
@@ -57,6 +60,9 @@ const IframeRouter = () => {
   const isValidFormPage = !!formInputs;
 
   useEffect(() => {
+    Auth.currentSession().then((data) => {
+      console.log("Bearer " + data.idToken.jwtToken);
+    });
     if (localStorage.getItem(storageConstants.shouldRestart)) {
       localStorage.removeItem(storageConstants.shouldRestart);
       window.location.reload();
@@ -86,11 +92,11 @@ const IframeRouter = () => {
           const url = window.location.pathname + window.location.search;
 
           localStorage.setItem(storageConstants.registerURL, url);
-
           history.push({
             pathname: "/successfully",
             state: {
               ...parsedMessage,
+              organizationName,
             },
           });
         } catch (err) {
@@ -123,6 +129,7 @@ const IframeRouter = () => {
           userToken={userToken}
           connectionId={connectionId}
           onSuccessScan={() => handleQRScan()}
+          setOrganizationName={(name) => setOrganizationName(name)}
         />
       )) ||
         (isFormPage && isValidFormPage && (

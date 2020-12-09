@@ -10,10 +10,10 @@ import {
 
 import "react-vertical-timeline-component/style.min.css";
 import maintenanceIcon from "../../assets/images/maintenance.svg";
-import creationIcon from "../../assets/images/creation.svg";
+import creationIcon from "../../assets/images/creation.png";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import Modal from "../Modal/Modal";
-import axios from "axios";
+import AxiosInstance from "../../utils/axiosUtils";
 
 const icons = {
   maintenanceIcon: maintenanceIcon,
@@ -26,26 +26,30 @@ const CarInfo = () => {
   const [carDetails, setCarDetails] = useState({});
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [roadMapElements, setRoadMapElements] = useState([]);
+  const [carLogs, setCarLogs] = useState([]);
 
   const history = useHistory();
   const { carId } = useParams();
-  console.log(carId);
+  const location = useLocation();
 
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_ENDPOINT}/getVehicleHistory?vin=${carId}`)
-      .then(({ data }) => {
-        const processedData = data.map(({ data }) => data);
-        processedData.sort((a, b) => b.date - a.date);
-        setRoadMapElements(processedData);
-      });
+    AxiosInstance.get(
+      `${process.env.REACT_APP_ENDPOINT}/getVehicleHistory?vin=${carId}`
+    ).then(({ data }) => {
+      const processedData = (data.maintenanceHistory || []).sort(
+        (a, b) => b.date - a.date
+      );
 
-    axios
-      .get(`${process.env.REACT_APP_ENDPOINT}/getVehicleDetails?vin=${carId}`)
-      .then(({ data }) => {
-        console.log(data);
-        setCarDetails(data._resultList[0]);
-      });
+      setRoadMapElements(processedData);
+      setCarLogs(data.vehicleHistory);
+      console.log(data.vehicleHistory);
+    });
+
+    AxiosInstance.get(
+      `${process.env.REACT_APP_ENDPOINT}/getVehicleDetails?vin=${carId}`
+    ).then(({ data }) => {
+      setCarDetails(data[0]);
+    });
   }, []);
 
   const onCancelModal = () => null;
@@ -63,7 +67,22 @@ const CarInfo = () => {
             />
           </div>
           <div className="modal__title">Car logs</div>
-          <div className="modal-content"></div>
+          <div className="modal-content">
+            {carLogs.map(
+              (log) =>
+                log.changes.length !== 0 && (
+                  <>
+                    <br />
+                    <b> {new Date(log.date).toLocaleDateString()}</b>
+                    <>
+                      {log.changes.map((change) => (
+                        <div>{change.replaceAll("undefined", " - ")}</div>
+                      ))}
+                    </>
+                  </>
+                )
+            )}
+          </div>
         </div>
       </Modal>
       <div className="car-info">
@@ -81,7 +100,15 @@ const CarInfo = () => {
               text={"New maintenance"}
               width={"97px"}
               height={"28px"}
-              onClick={() => history.push("/new-maintenance")}
+              onClick={() =>
+                history.push({
+                  pathname: "/new-maintenance",
+                  state: {
+                    vin: carDetails.VIN,
+                    serviceName: location.state.organizationName,
+                  },
+                })
+              }
             />
           </div>
         </div>
@@ -96,46 +123,57 @@ const CarInfo = () => {
           </div>
         </div>
         <div className="car-info__road-map">
-          <VerticalTimeline>
-            {roadMapElements.map((element, key) => (
-              <VerticalTimelineElement
-                key={key}
-                className="vertical-timeline-element--work"
-                contentStyle={{
-                  background: "black",
-                  color: "white",
-                }}
-                contentArrowStyle={{
-                  borderRight: "7px solid  rgb(255, 72, 52)",
-                }}
-                date={element.date}
-                dateClassName="vertical-timeline-element--date"
-                iconStyle={{
-                  background: "black",
-                  color: "#fff",
-                  paddingLeft: "1px",
-                  fontSize: "21px",
-                }}
-                icon={
-                  <img className="timeline__icon" src={icons[element.icon]} />
-                }
-                onTimelineElementClick={() =>
-                  element.onclick && element.onclick()
-                }
-              >
-                <h3 className="vertical-timeline-element-title">
-                  {element.date}
-                </h3>
-                <h4 className="vertical-timeline-element-subtitle">
-                  {element.serviceName}
-                </h4>
-                <div>
-                  <div>{element.kilometers} KMs</div>
-                  <div>{element.details}</div>
-                </div>
-              </VerticalTimelineElement>
-            ))}
-          </VerticalTimeline>
+          {(Array.isArray(roadMapElements) &&
+            roadMapElements.length !== 0 && (
+              <VerticalTimeline>
+                {roadMapElements.map((element, key) => (
+                  <VerticalTimelineElement
+                    key={key}
+                    className="vertical-timeline-element--work"
+                    contentStyle={{
+                      background: "black",
+                      color: "white",
+                    }}
+                    contentArrowStyle={{
+                      borderRight: "7px solid  rgb(255, 72, 52)",
+                    }}
+                    date={element.date}
+                    dateClassName="vertical-timeline-element--date"
+                    iconStyle={{
+                      background: "black",
+                      color: "#fff",
+                      paddingLeft: "1px",
+                      fontSize: "21px",
+                    }}
+                    icon={
+                      <img
+                        className="timeline__icon"
+                        src={icons[element.icon]}
+                      />
+                    }
+                    onTimelineElementClick={() =>
+                      element.onclick && element.onclick()
+                    }
+                  >
+                    <h3 className="vertical-timeline-element-title">
+                      {new Date(element.date).toLocaleDateString()}
+                    </h3>
+                    <h4 className="vertical-timeline-element-subtitle">
+                      {element.serviceName}
+                    </h4>
+                    <br />
+                    <div>
+                      <div>{element.kilometers} KMs</div>
+                      <br />
+
+                      {element.details.split(/\r?\n/).map((detail) => (
+                        <div>{detail}</div>
+                      ))}
+                    </div>
+                  </VerticalTimelineElement>
+                ))}
+              </VerticalTimeline>
+            )) || <div> No maintenance history yet</div>}
         </div>
       </div>
     </StyledCarInfo>
